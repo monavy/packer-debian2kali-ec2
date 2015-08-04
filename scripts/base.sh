@@ -11,6 +11,7 @@ EOL
 
 #### Download and import the official Kali Linux key
 wget -q -O - https://www.kali.org/archive-key.asc | gpg --import
+gpg -a --export ED444FF07D8D0BF6 | sudo apt-key add -
 
 #### Update our apt db
 apt-get update
@@ -20,12 +21,10 @@ apt-get -y --force-yes install kali-archive-keyring
 
 #### Preconfigure things so our install will work without any user input
 ## mysql
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password'
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password'    
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server-5.5/postrm_remove_databases boolean false'
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server-5.5/start_on_boot boolean true'
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server-5.5/nis_warning note'  
-debconf-set-selections <<< 'mysql-server-5.5 mysql-server-5.5/really_downgrade boolean false'
+pass=$(head -c 24 /dev/urandom | base64)
+echo "MySQL Root Password: $pass"
+debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password_again password $pass"
+debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password password $pass"
 
 ## Kismet
 debconf-set-selections <<< 'kismet kismet/install-setuid boolean false'
@@ -39,10 +38,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 #### Install the base software
 ## List taken from the official Kali-live-build script at: http://git.kali.org/gitweb/?p=live-build-config.git;a=blob_plain;f=config/package-lists/kali.list.chroot;hb=HEAD
-apt-get -y --force-yes install kali-linux
-apt-get -y --force-yes install kali-desktop-live
 apt-get -y --force-yes install kali-linux-full
-apt-get -y --force-yes install kali-desktop-gnome
 
 #### Update to the newest version of Kali
 apt-get -y --force-yes upgrade
