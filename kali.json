@@ -3,8 +3,7 @@
     "aws_access_key": "YOUR-ACCESS-KEY-HERE",
     "aws_secret_key": "YOUR-SECRET-KEY-HERE",
     "subnet_id": "YOUR-SUBNET-ID-HERE",
-    "security_group_id": "YOUR-SECURITY-GROUP-ID-HERE", 
-
+    "security_group_id": "YOUR-SECURITY-GROUP-ID-HERE",
     "instance_type": "t2.medium",
     "region": "us-east-1",
     "source_ami": "ami-e0efab88"   
@@ -20,15 +19,15 @@
   "source_ami": "{{user `source_ami`}}",
   "type": "amazon-ebs",
   "ssh_username": "admin",
-  "ami_name": "debian2kali-{{timestamp}}",
+  "ami_name": "kali-ami-{{timestamp}}",
   "ami_block_device_mappings": [{
-          "volume_size": 20,
+          "volume_size": 32,
           "volume_type": "gp2",
           "device_name": "/dev/xvda",
 	  "delete_on_termination": "true"
 	  }],
   "launch_block_device_mappings": [{
-          "volume_size": 20,
+          "volume_size": 32,
           "volume_type": "gp2",
           "device_name": "/dev/xvda",
 	  "delete_on_termination": "true"          
