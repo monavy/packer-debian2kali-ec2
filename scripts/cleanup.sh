@@ -27,3 +27,19 @@ echo > /var/log/gdm3/:0-slave.log
 # Clear our Bash history
 history -c
 history -w
+
+# Disable unneeded services
+sudo service samba stop
+sudo update-rc.d -f samba remove
+
+sudo service apache2 stop
+sudo update-rc.d -f apache2 remove
+
+sudo service mysql stop
+sudo update-rc.d -f mysql remove
+
+sudo service dradis stop
+sudo update-rc.d -f dradis remove
+
+sudo service beef-xss stop
+sudo update-rc.d -f beef-xss remove
