@@ -39,11 +39,8 @@ debconf-set-selections <<< 'sslh sslh/inetd_or_standalone select standalone'
 export DEBIAN_FRONTEND=noninteractive
 
 #### Install the base software
-apt-get -o Dpkg::Options::="--force-confnew" -fuy dist-upgrade
-apt-get -y install kali-linux-full
-
-#### Update to the newest version of Kali
-apt-get -y upgrade
+apt-get -o Dpkg::Options::="--force-confdef" -y install kali-linux-full
+apt-get -y install kali-desktop-gnome
 
 #### Clean up after apt-get
 apt-get -y autoremove --purge
