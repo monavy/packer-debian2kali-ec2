@@ -5,8 +5,7 @@ set -o pipefail
 
 #### Overwrite the default Debian mirrors/sources with the Kali mirrors/sources
 cat > /etc/apt/sources.list <<EOL
-deb http://http.kali.org/kali kali main non-free contrib
-deb http://security.kali.org/kali-security kali/updates main contrib non-free
+deb http://http.kali.org/kali kali-rolling main non-free contrib
 EOL
 
 #### Download and import the official Kali Linux key
@@ -17,14 +16,17 @@ gpg -a --export ED444FF07D8D0BF6 | sudo apt-key add -
 apt-get update
 
 #### Install the Kali keyring
-apt-get -y --force-yes install kali-archive-keyring
+apt-get -y install kali-archive-keyring
 
 #### Preconfigure things so our install will work without any user input
 ## mysql
 pass=$(head -c 24 /dev/urandom | base64)
 echo "MySQL Root Password: $pass"
-debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password_again password $pass"
-debconf-set-selections <<< "mysql-server-5.5 mysql-server/root_password password $pass"
+debconf-set-selections <<< "mysql-server-5.6 mysql-server/root_password_again password $pass"
+debconf-set-selections <<< "mysql-server-5.6 mysql-server/root_password password $pass"
+
+## wireshark
+debconf-set-selections <<< "wireshark-common wireshark-common/install-setuid boolean false"
 
 ## Kismet
 debconf-set-selections <<< 'kismet kismet/install-setuid boolean false'
@@ -37,14 +39,12 @@ debconf-set-selections <<< 'sslh sslh/inetd_or_standalone select standalone'
 export DEBIAN_FRONTEND=noninteractive
 
 #### Install the base software
-## List taken from the official Kali-live-build script at: http://git.kali.org/gitweb/?p=live-build-config.git;a=blob_plain;f=config/package-lists/kali.list.chroot;hb=HEAD
-apt-get -y --force-yes install kali-linux-full
+apt-get -o Dpkg::Options::="--force-confnew" -fuy dist-upgrade
+apt-get -y install kali-linux-full
 
 #### Update to the newest version of Kali
-apt-get -y --force-yes upgrade
-apt-get -o Dpkg::Options::="--force-confnew" --force-yes -fuy dist-upgrade
+apt-get -y upgrade
 
 #### Clean up after apt-get
 apt-get -y autoremove --purge
 apt-get -y clean
-  
