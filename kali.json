@@ -6,7 +6,7 @@
     "security_group_id": "YOUR-SECURITY-GROUP-ID-HERE",
     "instance_type": "t2.medium",
     "region": "us-east-1",
-    "source_ami": "ami-e0efab88"   
+    "source_ami": "ami-8e9ca3e4"
   },
 
   "builders": [{
